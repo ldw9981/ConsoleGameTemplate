@@ -75,7 +75,7 @@ namespace ConsoleRenderer
         DWORD	dwCharsWritten;
         cdPos.X = x;
         cdPos.Y = y;
-
+       
         bRval = FillConsoleOutputCharacterA(hScreenBuffer[nScreenBufferIndex], ch, 1, cdPos, &dwCharsWritten);
         if (bRval == false) printf("Error, FillConsoleOutputCharacter()\n");
 
@@ -93,10 +93,8 @@ namespace ConsoleRenderer
         cdPos.Y = y;
 
         DWORD nNumberOfBytesToWrite = (DWORD)strlen(pStr);
-
-        SetConsoleCursorPosition(hScreenBuffer[nScreenBufferIndex], cdPos);
-        WriteConsoleA(hScreenBuffer[nScreenBufferIndex], pStr, nNumberOfBytesToWrite, &dwCharsWritten, NULL);
- 
+		//특정 위치에 문자열을 출력한다.
+        WriteConsoleOutputCharacterA(hScreenBuffer[nScreenBufferIndex], pStr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
         bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
         if (bRval == false) printf("Error, FillConsoleOutputAttribute()\n");
         return bRval;
