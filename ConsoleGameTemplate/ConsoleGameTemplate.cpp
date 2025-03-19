@@ -59,9 +59,9 @@ void Update()
 
 void Render()
 {
-	ConsoleRenderer::ScreenClear();
-	ConsoleRenderer::ScreenSetString(0, 0, "Hello 안녕", FG_PINK_DARK);
-	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y, 'P', FG_WHITE);
+	ConsoleRenderer::ScreenClear();	
+	ConsoleRenderer::ScreenDrawString(0, 0, "Hello 안녕", FG_PINK_DARK);
+	ConsoleRenderer::ScreenDrawChar(g_Player.X, g_Player.Y, 'P', FG_WHITE);
 	ConsoleRenderer::ScreenFlipping();
 }
 

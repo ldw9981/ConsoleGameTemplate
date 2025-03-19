@@ -1,13 +1,6 @@
 #include "ConsoleRenderer.h"
 #include <stdio.h>
 
-
-/*
-
-    Windows 11 22H2에서는 콘솔 창을 호스트하는 데 사용되는 기본 앱이 Windows 터미널 변경되었습니다.
-    * 몇몇 콘솔창 관련 함수가 작동안함.
-    https://support.microsoft.com/ko-kr/windows/windows-11-%EB%8C%80%ED%95%9C-%EB%AA%85%EB%A0%B9-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EB%B0%8F-windows-powershell-6453ce98-da91-476f-8651-5c14d5777c20
-*/
 namespace ConsoleRenderer
 {
     HANDLE hConsoleHandle;      // 초기 화면 콘솔의 핸들
@@ -16,12 +9,7 @@ namespace ConsoleRenderer
     int nScreenHeight = 0; // 콘솔창의 높이
     int nScreenBufferSize = 0; // 콘솔창의 스크린버퍼 크기
     int nScreenBufferIndex = 0; // 콘솔창이 사용할 스크린버퍼의 인덱스
-    HANDLE hScreenBuffer[2];
-
-    HANDLE GetCurrentScreenBufferHandle()
-    {
-        return hScreenBuffer[nScreenBufferIndex];
-    }
+	HANDLE hScreenBuffer[2]; // 콘솔창이 사용할 스크린버퍼의 핸들
 
     void ScreenInit()
     {
@@ -50,7 +38,7 @@ namespace ConsoleRenderer
     void ScreenFlipping()
     {
         // 실제 콘솔이 사용할 스크린버퍼의 Handle을 설정하여 화면에 보여준다.
-        SetConsoleActiveScreenBuffer(GetCurrentScreenBufferHandle());
+        SetConsoleActiveScreenBuffer(hScreenBuffer[nScreenBufferIndex]);
         // 다음에 사용할 스크린 버퍼의 인덱스를 증가시켜 준비한다.
         nScreenBufferIndex++;
         nScreenBufferIndex = nScreenBufferIndex % 2;  // 0,1,0,1,0,1,0,1....
@@ -60,7 +48,7 @@ namespace ConsoleRenderer
     {
         COORD Coor = { 0, 0 };
         DWORD dw;
-        FillConsoleOutputCharacter(GetCurrentScreenBufferHandle(), ' ', nScreenBufferSize, Coor, &dw);
+        FillConsoleOutputCharacter(hScreenBuffer[nScreenBufferIndex], ' ', nScreenBufferSize, Coor, &dw);
     }
 
     void ScreenRelease()
@@ -80,7 +68,7 @@ namespace ConsoleRenderer
     */
 
 
-    bool ScreenSetChar(int x, int y, char ch, WORD attr)
+    bool ScreenDrawChar(int x, int y, char ch, WORD attr)
     {
         COORD	cdPos;
         BOOL	bRval = FALSE;
@@ -88,15 +76,15 @@ namespace ConsoleRenderer
         cdPos.X = x;
         cdPos.Y = y;
 
-        bRval = FillConsoleOutputCharacter(GetCurrentScreenBufferHandle(), ch, 1, cdPos, &dwCharsWritten);
+        bRval = FillConsoleOutputCharacterA(hScreenBuffer[nScreenBufferIndex], ch, 1, cdPos, &dwCharsWritten);
         if (bRval == false) printf("Error, FillConsoleOutputCharacter()\n");
 
-        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), attr, 1, cdPos, &dwCharsWritten);
+        bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, 1, cdPos, &dwCharsWritten);
         if (bRval == false) printf("Error, FillConsoleOutputAttribute()\n");
         return bRval;
     }
 
-    bool ScreenSetString(int x, int y, const char* pStr, WORD attr)
+    bool ScreenDrawString(int x, int y, const char* pStr, WORD attr)
     {
         COORD	cdPos;
         BOOL	bRval = FALSE;
@@ -106,15 +94,15 @@ namespace ConsoleRenderer
 
         DWORD nNumberOfBytesToWrite = (DWORD)strlen(pStr);
 
-        SetConsoleCursorPosition(GetCurrentScreenBufferHandle(), cdPos);
-        WriteFile(GetCurrentScreenBufferHandle(), pStr, nNumberOfBytesToWrite, &dwCharsWritten, NULL);
-
-        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), attr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
+        SetConsoleCursorPosition(hScreenBuffer[nScreenBufferIndex], cdPos);
+        WriteConsoleA(hScreenBuffer[nScreenBufferIndex], pStr, nNumberOfBytesToWrite, &dwCharsWritten, NULL);
+ 
+        bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
         if (bRval == false) printf("Error, FillConsoleOutputAttribute()\n");
         return bRval;
     }
 
-    bool ScreenSetAttr(WORD attr)
+    bool ScreenSetAttributes(WORD attr)
     {
         COORD	cdPos;
         bool	bRval = FALSE;
@@ -123,7 +111,7 @@ namespace ConsoleRenderer
 
         cdPos.X = 0;
         cdPos.Y = 0;
-        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), attr, nScreenBufferSize, cdPos, &dwCharsWritten);
+        bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nScreenBufferSize, cdPos, &dwCharsWritten);
         if (bRval == false)
         {
             printf("Error, FillConsoleOutputCharacter()\n");

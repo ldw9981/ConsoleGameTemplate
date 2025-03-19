@@ -55,9 +55,9 @@ namespace ConsoleRenderer
 	void ScreenFlipping();
 	void ScreenClear();
 
-	bool ScreenSetChar(int x, int y, char ch, WORD attr);
-	bool ScreenSetString(int x, int y, const char* pStr, WORD attr);
-	bool ScreenSetAttr(WORD attr);
+	bool ScreenDrawChar(int x, int y, char ch, WORD attr);
+	bool ScreenDrawString(int x, int y, const char* pStr, WORD attr);
+	bool ScreenSetAttributes(WORD attr);
 
 	int ScreenWidth();
 	int ScreenHeight();
