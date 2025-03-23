@@ -5,7 +5,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include "ConsoleRenderer.h"
-
+#include "Input.h"
 
 bool g_bQuit = false;
 void Update();
@@ -16,11 +16,11 @@ COORD g_Player = { 0,0 };
 
 int main()
 {
-	ConsoleRenderer::ScreenInit();
+	ConsoleRenderer::ScreenInit();	
 
 	while (!g_bQuit)
 	{
-		ProcessInput();
+		Input::Update();		
 		Update();
 		Render();
 	};
@@ -31,19 +31,19 @@ int main()
 
 void ProcessInput()
 {
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
+	if (Input::IsKeyDown(VK_LEFT)) { //왼쪽
 		g_Player.X--;
 	}
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽
+	if (Input::IsKeyDown(VK_RIGHT)) { //오른쪽
 		g_Player.X++;
 	}
-	if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
+	if (Input::IsKeyDown(VK_UP)) { //위
 		g_Player.Y--;
 	}
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
+	if (Input::IsKeyDown(VK_DOWN)) { //아래
 		g_Player.Y++;
 	}
-	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { //종료
+	if (Input::IsKeyDown(VK_ESCAPE)) { //종료
 		g_bQuit = true;
 	}
 
@@ -51,6 +51,8 @@ void ProcessInput()
 
 void Update()
 {
+	ProcessInput();
+
 	if (g_Player.X < 0) g_Player.X = 0;
 	if (g_Player.X >= ConsoleRenderer::ScreenWidth()) g_Player.X = ConsoleRenderer::ScreenWidth() - 1;
 	if (g_Player.Y < 0) g_Player.Y = 0;
