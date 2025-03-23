@@ -19,7 +19,7 @@ COORD g_Player = { 0,0 };
 int main()
 {	
 	ConsoleRenderer::ScreenInit();	
-
+	Time::InitTime();
 	while (!g_bQuit)
 	{
 		Time::UpdateTime();
@@ -64,9 +64,16 @@ void Update()
 
 void Render()
 {
-	ConsoleRenderer::ScreenClear();	
-	ConsoleRenderer::ScreenDrawString(0, 0,L"abcd한글🌊🏄‍♂️🚁😀⭠⭡⭢⭣⭦⭧⭨⭩⬤111", FG_PINK_DARK);
+	ConsoleRenderer::ScreenClear();
+
+	char buf[256] = { 0, };
+	float time = Time::GetTotalTime();
+	sprintf_s(buf,"프로그램 시작이후의 시간입니다. %f",Time::GetTotalTime());
+	
+	ConsoleRenderer::ScreenDrawString(0, 0, buf, FG_PINK_DARK);
+	ConsoleRenderer::ScreenDrawString(0, 1,L"특수문자는 Wide Character의 출력이 필요합니다.abcd한글🌊🏄‍♂️🚁😀⭠⭡⭢⭣⭦⭧⭨⭩⬤111", FG_PINK_DARK);
 	ConsoleRenderer::ScreenDrawChar(g_Player.X, g_Player.Y, L'A', FG_WHITE);
+	
 	ConsoleRenderer::ScreenFlipping();
 }
 
