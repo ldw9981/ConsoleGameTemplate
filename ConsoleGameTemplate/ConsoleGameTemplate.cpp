@@ -7,6 +7,7 @@
 #include "ConsoleRenderer.h"
 #include "Input.h"
 #include "Time.h"
+#include <stdio.h>
 
 bool g_bQuit = false;
 void Update();
@@ -16,7 +17,7 @@ void ProcessInput();
 COORD g_Player = { 0,0 };
 
 int main()
-{
+{	
 	ConsoleRenderer::ScreenInit();	
 
 	while (!g_bQuit)
@@ -64,8 +65,8 @@ void Update()
 void Render()
 {
 	ConsoleRenderer::ScreenClear();	
-	ConsoleRenderer::ScreenDrawString(0, 0, "Hello 안녕", FG_PINK_DARK);
-	ConsoleRenderer::ScreenDrawChar(g_Player.X, g_Player.Y, 'P', FG_WHITE);
+	ConsoleRenderer::ScreenDrawString(0, 0,L"abcd한글🌊🏄‍♂️🚁😀⭠⭡⭢⭣⭦⭧⭨⭩⬤111", FG_PINK_DARK);
+	ConsoleRenderer::ScreenDrawChar(g_Player.X, g_Player.Y, L'A', FG_WHITE);
 	ConsoleRenderer::ScreenFlipping();
 }
 

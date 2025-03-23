@@ -56,7 +56,9 @@ namespace ConsoleRenderer
 	void ScreenClear();
 
 	bool ScreenDrawChar(int x, int y, char ch, WORD attr);
+	bool ScreenDrawChar(int x, int y, wchar_t ch, WORD attr);
 	bool ScreenDrawString(int x, int y, const char* pStr, WORD attr);
+	bool ScreenDrawString(int x, int y, const wchar_t* pStr, WORD attr);
 	bool ScreenSetAttributes(WORD attr);
 
 	int ScreenWidth();
