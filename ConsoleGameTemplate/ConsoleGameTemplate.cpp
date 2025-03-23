@@ -6,6 +6,7 @@
 #include <conio.h>
 #include "ConsoleRenderer.h"
 #include "Input.h"
+#include "Time.h"
 
 bool g_bQuit = false;
 void Update();
@@ -20,6 +21,7 @@ int main()
 
 	while (!g_bQuit)
 	{
+		Time::UpdateTime();
 		Input::Update();		
 		Update();
 		Render();
