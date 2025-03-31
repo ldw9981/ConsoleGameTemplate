@@ -108,10 +108,10 @@ namespace ConsoleRenderer
         cdPos.X = x;
         cdPos.Y = y;
 
-        DWORD nNumberOfBytesToWrite = (DWORD)strlen(pStr);
+        DWORD nLength = (DWORD)strlen(pStr);
 		//특정 위치에 문자열을 출력한다.
-        WriteConsoleOutputCharacterA(hScreenBuffer[nScreenBufferIndex], pStr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
-        bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
+        WriteConsoleOutputCharacterA(hScreenBuffer[nScreenBufferIndex], pStr, nLength, cdPos, &dwCharsWritten);
+        bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nLength, cdPos, &dwCharsWritten);
         if (bRval == false) OutputDebugStringA("Error, FillConsoleOutputAttribute()\n");
         return bRval;
     }
@@ -124,10 +124,10 @@ namespace ConsoleRenderer
 		cdPos.X = x;
 		cdPos.Y = y;
 
-		DWORD nNumberOfBytesToWrite = (DWORD)wcslen(pStr);
+		DWORD nLength = (DWORD)wcslen(pStr);
 		//특정 위치에 문자열을 출력한다.
-		WriteConsoleOutputCharacterW(hScreenBuffer[nScreenBufferIndex], pStr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
-		bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
+		WriteConsoleOutputCharacterW(hScreenBuffer[nScreenBufferIndex], pStr, nLength, cdPos, &dwCharsWritten);
+		bRval = FillConsoleOutputAttribute(hScreenBuffer[nScreenBufferIndex], attr, nLength*2, cdPos, &dwCharsWritten);
 		if (bRval == false) OutputDebugStringA("Error, FillConsoleOutputAttribute()\n");
 		return bRval;
 	}
